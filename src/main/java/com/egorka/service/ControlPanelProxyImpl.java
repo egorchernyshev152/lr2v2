@@ -1,20 +1,28 @@
 package com.egorka.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.ApplicationContext;
+import org.springframework.stereotype.Component;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 import java.util.Scanner;
-
+@Component
 public class ControlPanelProxyImpl implements ControlPanelProxy{
     private final ControlPanel controlPanel;
     private final Logger logger;
     private final Map<String, String> cache; // Кэш для хранения результатов операций
+    private final Menu menu;
     private boolean initialized = false;
 
-    public ControlPanelProxyImpl(ControlPanel controlPanel) {
+    @Autowired
+    public ControlPanelProxyImpl(ControlPanel controlPanel, @Autowired ApplicationContext context) {
         this.controlPanel = controlPanel;
         this.logger = Logger.getLogger(ControlPanelProxyImpl.class.getName());
         this.cache = new HashMap<>();
+        this.menu = context.getBean(Menu.class); // Получаем бин Menu из контекста
         if (checking()) {
             System.out.println("С возвращением, пользователь!!!");
         } else{
@@ -64,8 +72,6 @@ public class ControlPanelProxyImpl implements ControlPanelProxy{
     @Override
     public void requestLampUnlink() {
         Scanner scanner = new Scanner(System.in);
-        Menu menu = new Menu();
-
         int buttonX = Menu.requestIntegerInput(scanner, "Введите координату кнопки (X):");
         int buttonY = Menu.requestIntegerInput(scanner, "Введите координату кнопки (Y):");
 

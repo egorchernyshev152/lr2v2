@@ -1,18 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:util="http://www.springframework.org/schema/util"
        xsi:schemaLocation="
-		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
-		http://www.springframework.org/schema/util https://www.springframework.org/schema/util/spring-util.xsd">
-    <bean id = "requestHandlerChain"
-          class="com.egorka.service.RequestHandlerChain">
+           http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- Конфигурация для сервисов -->
+
+    <bean id="controlPanel" class="com.egorka.service.ControlPanel">
+        <constructor-arg value="4"  />
+        <constructor-arg value="4"  />
     </bean>
 
-    <bean id="menu"
-          class="com.egorka.service.Menu">
+    <bean id="buttonBuilder" class="com.egorka.service.ButtonBuilder" />
+
+    <bean id="lampFactory" class="com.egorka.service.LampFactoryImpl" factory-method="getInstance" />
+
+    <bean id="controlPanelProxy" class="com.egorka.service.ControlPanelProxyImpl">
+        <constructor-arg ref="controlPanel" />
     </bean>
 
+    <!-- Конфигурация для обработчиков запросов -->
+
+    <bean id="buttonPressHandler" class="com.egorka.service.ButtonPressHandler" />
+
+    <bean id="lampBindingHandler" class="com.egorka.service.LampBindingHandler" />
+
+    <bean id="lampUnlinkHandler" class="com.egorka.service.LampUnlinkHandler" />
+
+    <!-- Конфигурация для меню -->
+
+    <bean id="menu" class="com.egorka.service.Menu" />
+
+    <!-- Конфигурация для цепочки обработчиков -->
+
+    <bean id="requestHandlerChain" class="com.egorka.service.RequestHandlerChain">
+        <property name="handlers">
+            <list>
+                <ref bean="buttonPressHandler" />
+                <ref bean="lampBindingHandler" />
+                <ref bean="lampUnlinkHandler" />
+            </list>
+        </property>
+    </bean>
 
 </beans>
-

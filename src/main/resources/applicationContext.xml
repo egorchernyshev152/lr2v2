@@ -5,8 +5,14 @@
        xsi:schemaLocation="
 		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/util https://www.springframework.org/schema/util/spring-util.xsd">
+    <bean id = "requestHandlerChain"
+          class="com.egorka.service.RequestHandlerChain">
+    </bean>
 
-    <!-- bean definitions here -->
+    <bean id="menu"
+          class="com.egorka.service.Menu">
+    </bean>
+
 
 </beans>
 
